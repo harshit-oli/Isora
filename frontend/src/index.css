@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+* {
+    scrollbar-width: none;
+    -ms-overflow-style:none;
+}
+::-webkit-scrollbar{
+    display: none;
+ }
+
+ /* yha 
+ * {
+    scrollbar-width: none;
+    -ms-overflow-style:none;
+}
+::-webkit-scrollbar{
+    display: none;
+ }
+    ye code humne scrollbar ko htane ke liye kiya h
+    
+  */
