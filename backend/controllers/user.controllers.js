@@ -4,7 +4,7 @@ import User from "../models/user.model.js";
 export const getCurrentUser=async(req,res)=>{
     try {
         const userId=req.userId;
-        const user=await User.findById(userId);
+        const user=await User.findById(userId).populate("posts");
         if(!user){
             return res.status(400).json({
                 success:false,
@@ -38,13 +38,15 @@ export const suggestedUsers=async (req,res)=>{
 
 export const editProfile=async (req,res)=>{
     try {
+        console.log("file:", req.file);
+        console.log("body:", req.body);
         const {name,userName,bio,profession,gender}=req.body;
         const user=await User.findById(req.userId).select("-password")
         if(!user){
             return res.status(400).json({message:"user not found"})
         }
         const sameUserWithUserName=await User.findOne({userName}).select("-password")
-        if(sameUserWithUserName && sameUserWithUserName._id !== req.userId){
+        if(sameUserWithUserName && sameUserWithUserName._id.toString() !== req.userId){
             return res.status(400).json({message:"User Already Exist"})
         }
         let profileImage;
@@ -53,11 +55,14 @@ export const editProfile=async (req,res)=>{
         }
          user.name=name
          user.userName=userName
-         user.profileImage=profileImage
+         if (profileImage) {
+         user.profileImage = profileImage;
+        }
+
          user.bio=bio
          user.profession=profession
          user.gender=gender
-         await user.save();
+         await user.save(); 
          return res.status(200).json(user);
     } catch (error) {
         return res.status(500).json({

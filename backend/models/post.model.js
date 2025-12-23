@@ -26,9 +26,15 @@ const postSchema=new mongoose.model({
     ],
      comments:[
         {
+           author:{
             type:mongoose.Schema.Types.ObjectId,
             ref:"User",
-        }
+           },
+           message:{
+            type:String
+           }
+        },
+
     ],
 },{timeStamps:true})
 

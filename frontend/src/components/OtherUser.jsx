@@ -2,17 +2,16 @@ import React from 'react'
 // import { useSelector} from 'react-redux'
 import logo2 from "../assets/logo2.png"
 import { useNavigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+// import { useSelector } from 'react-redux'
 
 const OtherUser = ({user}) => {
-     const {suggestedUsers}=useSelector(state=>state.user)
 
     const navigate=useNavigate();
   return (
     <div className='w-full h-[80px] flex items-center justify-between border-b-2 border-gray-800'>
        <div className='flex items-center gap-[10px]'>
               <div className='w-[50px] h-[50px] border-2 border-black rounded-full cursor-pointer overflow-hidden'>
-                  <img src={user.profieImage || logo2} alt=""  className='w-full object-cover' onClick={()=> navigate(`/profile/${user?.userName}`)}/>
+                  <img src={user.profileImage || logo2} alt=""  className='w-full object-cover' onClick={()=> navigate(`/profile/${user?.userName}`)}/>
               </div>
               <div>
                   <div className='text-[18px] text-white font-semibold'>{user.userName}</div>

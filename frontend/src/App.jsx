@@ -8,6 +8,7 @@ import GetCurrentUser from './hooks/GetCurrentUser'
 import Home from './pages/Home'
 import GetSuggestedUsers from "./hooks/GetSuggestedUsers"
 import Profile from './pages/Profile'
+import EditProfile from './pages/EditProfile'
 export const serverUrl="http://localhost:3000"
 const App = () => {
   // GetCurrentUser(); 
@@ -22,6 +23,7 @@ const App = () => {
         <Route path='/' element={userData?<Home/>:<Navigate to={"/login"}/>}/>
         <Route path='/forgot-password' element={!userData?<ForgotPassword/> : <Navigate to={"/"}/>}/>
         <Route path='/profile/:userName' element={userData?<Profile/>:<Navigate to={"/login"}/>}/>
+        <Route path='/editProfile' element={userData?<EditProfile/>:<Navigate to={"/login"}/>}/>
       </Routes>
     </div>
   )

@@ -1,17 +1,20 @@
 import axios from 'axios'
 import { serverUrl } from '../App'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import { setProfileData } from '../redux/userSlice';
 import { useEffect } from 'react';
 import { IoMdArrowBack } from "react-icons/io";
 import { setUserData } from '../redux/userSlice';
 import logo2 from "../assets/logo2.png"
+import Nav from '../components/Nav';
+import Home from './Home';
 const Profile = () => {
 
     const {userName}=useParams();   // yha useParams mai params mai value Link ke through aayi hogi humne Link<to="/getProfile/:userName"></Link> kuch yese kiya hoga
     const dispatch=useDispatch()
     const {profileData,userData}=useSelector(state=>state.user);
+    const navigate=useNavigate();
 
     const handleProfile=async()=>{
         try {
@@ -37,17 +40,17 @@ const Profile = () => {
   return (
     <div className='w-full min-h-screen bg-black'>
       <div className='w-full h-[80px] flex justify-between items-center px-[30px] text-white'>
-        <div><IoMdArrowBack className='text-white w-[25px] h-[25px]'/></div>
+        <div onClick={()=>{navigate("/")}} className='cursor-pointer'><IoMdArrowBack className='text-white w-[25px] h-[25px]'/></div>
         <div className='font-semibold text-[20px]'>{profileData?.userName}</div>
         <div className='font-semibold cursor-pointer text-[20px] text-blue-500' onClick={handleLogOut}>Log Out</div>
       </div>
 
       <div className='w-full h-[150px] flex items-start gap-[20px] lg:gap-[50px] pt-[20px] px-[10px] justify-center'>
           <div className='w-[80px] h-[80px] border-2 border-black rounded-full cursor-pointer overflow-hidden md:w-[140px] h-[140px]'>
-                    <img src={profileData?.profieImage || logo2} alt=""  className='w-full object-cover'/>
-                </div>
+                    <img src={profileData?.profileImage || logo2} alt=""  className='w-full object-cover'/>
+          </div>
           <div>
-            <div className='font-semibold text-[22px] text-white'>{profileData?.userName}</div>
+            <div className='font-semibold text-[22px] text-white'>{profileData?.name}</div>
             <div className='text-[17px] text-[#ffffffe8]'>{profileData?.profession || "New User"}</div>
             <div className='text-[17px] text-[#ffffffe8]'>{profileData?.bio}</div>
           </div>      
@@ -98,7 +101,7 @@ const Profile = () => {
       <div className='w-full h-[80px] flex justify-center items-center gap-[20px] mt-[10px]'>
         {profileData?._id==userData?._id 
         &&
-        <button className='px-[10px] min-w-[150px] py-[5px] h-[40px] bg-[white] cursor-pointer rounded-2xl'>Edit Profile</button>
+        <button className='px-[10px] min-w-[150px] py-[5px] h-[40px] bg-[white] cursor-pointer rounded-2xl' onClick={()=>{navigate("/editProfile")}}>Edit Profile</button>
         }
         {profileData?._id!=userData?._id 
         &&
@@ -107,6 +110,11 @@ const Profile = () => {
          <button className='px-[10px] min-w-[150px] py-[5px] h-[40px] bg-[white] cursor-pointer rounded-2xl'>Message</button>
         </>
         }
+      </div>
+      <div className='w-full min-h-[100vh] flex justify-center'>
+        <div className='w-full max-w-[900px] flex flex-col items-center rounded-t-[30px] bg-white relative gap-[20px] pt-[30px]'>
+          <Nav/>
+        </div>
       </div>
     </div>
   )
