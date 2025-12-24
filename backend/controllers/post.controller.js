@@ -1,4 +1,4 @@
-import uploadOnCloudinary from "../config/cloudinary";
+import uploadOnCloudinary from "../config/cloudinary.js";
 import Post from "../models/post.model.js"
 import User from "../models/user.model.js";
 
@@ -28,8 +28,7 @@ export const uploadPost=async(req,res)=>{
 
 export const getAllPosts=async (req,res)=>{
     try {
-        const posts=await Post.find({author:req.userId}).
-        populate("author","name userName profileImage")
+        const posts=await Post.find({}).populate("author","name userName profileImage")
         return res.status(200).json(posts)
     } catch (error) {
         return res.status(500).json({message:`getallpost error ${error}`});
@@ -61,7 +60,7 @@ export const like=async (req,res)=>{
     }
 }
 
-const comment=async(req,res)=>{
+export const comment=async(req,res)=>{
     try {
         const {message}=req.body;
         const postId=req.params.PostId
@@ -80,11 +79,11 @@ const comment=async(req,res)=>{
         post.populate("comments.author")
         return res.status(200).json(post)
     } catch (error) {
-        
+        return res.status(500).json({message:`comments error ${error}`}); 
     }
 }
 
-const save=async(req,res)=>{
+export const save=async(req,res)=>{
     try {
         const postId=req.params.postId
         const post =await post.findById(postId)

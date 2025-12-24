@@ -25,12 +25,16 @@ const loopSchema=new mongoose.Schema({
            }
        ],
         comments:[
-           {
-               type:mongoose.Schema.Types.ObjectId,
-               ref:"User",
-           }
-       ],
-
+                {
+                   author:{
+                    type:mongoose.Schema.Types.ObjectId,
+                    ref:"User",
+                   },
+                   message:{
+                    type:String
+                   },
+                }
+            ],
 })
 
  const Loop=mongoose.model("Loop",loopSchema);
