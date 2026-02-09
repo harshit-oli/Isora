@@ -19,5 +19,4 @@ import { setPostData } from '../redux/postSlice';
         fetchPost();
     },[dispatch,userData]);
     }
-
     export default GetAllPost

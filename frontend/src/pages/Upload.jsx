@@ -120,7 +120,7 @@ const Upload = () => {
           {!frontendMedia && 
              <div className='w-[80%] max-w-[500px] h-[250px] bg-[#0e1316] border-gray-800 border-2 flex flex-col items-center 
            justify-center gap-[8px] mt-[15vh] rounded-2xl cursor-pointer hover:bg-[#353a3d] text-white' onClick={()=>mediaInp.current.click()}>
-            <input type="file" className='hidden' ref={mediaInp} onChange={handlePost}/>
+            <input type="file" accept={uploadType=="loop"?"video/*":""} className='hidden' ref={mediaInp} onChange={handlePost}/>
             <FaPlus className="text-white cursor-pointer w-[25px] h-[25px]"/>
             <div className='text-white text-[19px] font-semibold'>Upload {uploadType}</div>
            </div>}

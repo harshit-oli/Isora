@@ -3,19 +3,22 @@ import { serverUrl } from '../App'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import { setProfileData } from '../redux/userSlice';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { IoMdArrowBack } from "react-icons/io";
 import { setUserData } from '../redux/userSlice';
 import logo2 from "../assets/logo2.png"
 import Nav from '../components/Nav';
 import Home from './Home';
 import FollowButton from '../components/FollowButton';
+import Post from '../components/Post';
 const Profile = () => {
 
     const {userName}=useParams();   // yha useParams mai params mai value Link ke through aayi hogi humne Link<to="/getProfile/:userName"></Link> kuch yese kiya hoga
     const dispatch=useDispatch()
     const {profileData,userData}=useSelector(state=>state.user);
+    const {postData}=useSelector(state=>state.post);
     const navigate=useNavigate();
+    const [postType,setPostType]=useState("posts");
 
 
     const handleProfile=async()=>{
@@ -112,7 +115,36 @@ const Profile = () => {
       </div>
       <div className='w-full min-h-[100vh] flex justify-center'>
         <div className='w-full max-w-[900px] flex flex-col items-center rounded-t-[30px] bg-white relative gap-[20px] pt-[30px]'>
+            <div className='w-[80%] max-w-[600px] h-[80px] bg-white rounded-full flex justify-around items-center gap-[10px]'>
+            <div className={`${postType=="posts"?"bg-black shadow-2xl shadow-black text-white":""}
+               w-[28%] rounded-full h-[55%] cursor-pointer hover:h-[60%] max-w-[100px] items-center flex justify-center font-semibold`} 
+               onClick={()=>setPostType("posts")}>Posts</div>
+            {profileData?._id==userData._id && <div className={`${postType=="saved"?"bg-black shadow-2xl shadow-black text-white":""}
+               w-[28%]  rounded-full h-[55%] cursor-pointer hover:h-[60%] max-w-[100px] items-center flex justify-center font-semibold`}
+                onClick={()=>setPostType("saved")}>Saved</div>
+            }
+           </div>
           <Nav/>
+
+          {profileData?._id==userData._id &&
+          <>
+            {postType=="posts" && postData.map((post,index)=>(
+            post.author?._id==profileData?._id && <Post key={index} post={post}/>
+          ))}
+     
+          {postType=="saved" && postData?.map((post,index)=>(
+           userData.saved.includes(post._id) && <Post key={index} post={post}/>
+          ))}
+          </>
+          }
+
+           {profileData?._id!=userData._id &&
+          <>
+            {postData.map((post,index)=>(
+            post.author?._id==profileData?._id && <Post key={index} post={post}/>
+          ))}
+          </>
+          }
         </div>
       </div>
     </div>

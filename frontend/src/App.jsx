@@ -11,6 +11,8 @@ import Profile from './pages/Profile'
 import EditProfile from './pages/EditProfile'
 import Upload from './pages/Upload'
 import GetAllPost from './hooks/GetAllPost'
+import Loops from './pages/Loops'
+import GetAllLoops from './hooks/getAllLoops'
 export const serverUrl="http://localhost:3000"
 const App = () => {
   // GetCurrentUser(); 
@@ -18,6 +20,7 @@ const App = () => {
   return (
     <div>
       <GetCurrentUser/>
+      <GetAllLoops/>
       <GetSuggestedUsers/>
       <GetAllPost/>
       <Routes>
@@ -28,6 +31,7 @@ const App = () => {
         <Route path='/profile/:userName' element={userData?<Profile/>:<Navigate to={"/login"}/>}/>
         <Route path='/editProfile' element={userData?<EditProfile/>:<Navigate to={"/login"}/>}/>
         <Route path='/upload' element={userData?<Upload/>:<Navigate to={"/login"}/>}/>
+        <Route path='/loops' element={userData?<Loops/>:<Navigate to={"/login"}/>}/>
       </Routes>
     </div>
   )
