@@ -1,11 +1,32 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { FiVolume2 } from "react-icons/fi";
 import { FiVolumeX } from "react-icons/fi";
 
 const VideoPlayer = ({media}) => {
     const videoTag=useRef();
-    const [mute,setMute]=useState(true);
+    const [mute,setMute]=useState(false);
     const [isPlaying,setIsplaying]=useState(true);
+
+        useEffect(()=>{
+           const observer=new IntersectionObserver(([entry])=>{
+             const video=entry.target;
+             if(entry.isIntersecting){
+               video.play();
+             }
+             else{
+               video.pause();
+             } 
+           },{threshold:0.6})
+           if(videoTag.current){
+             observer.observe(videoTag.current);
+           }
+       
+           return ()=>{
+             if(videoTag.current){
+             observer.unobserve(videoTag.current);
+           }
+           }
+          },[]);
     
     const handleClick=()=>{
         if(isPlaying){
