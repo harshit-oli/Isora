@@ -26,8 +26,6 @@ const Post = ({post}) => {
   const isSaved = userData?.saved?.some(
   p => p?._id === post?._id
 );
-
-
   const handleLike=async ()=>{
     try {
       const result=await axios.get(`${serverUrl}/api/post/like/${post._id}`,{withCredentials:true});
