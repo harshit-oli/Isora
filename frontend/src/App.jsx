@@ -13,6 +13,7 @@ import Upload from './pages/Upload'
 import GetAllPost from './hooks/GetAllPost'
 import Loops from './pages/Loops'
 import GetAllLoops from './hooks/getAllLoops'
+import Story from './pages/Story'
 export const serverUrl="http://localhost:3000"
 const App = () => {
   // GetCurrentUser(); 
@@ -29,6 +30,7 @@ const App = () => {
         <Route path='/' element={userData?<Home/>:<Navigate to={"/login"}/>}/>
         <Route path='/forgot-password' element={!userData?<ForgotPassword/> : <Navigate to={"/"}/>}/>
         <Route path='/profile/:userName' element={userData?<Profile/>:<Navigate to={"/login"}/>}/>
+        <Route path='/story/:userName' element={userData?<Story/>:<Navigate to={"/login"}/>}/>
         <Route path='/editProfile' element={userData?<EditProfile/>:<Navigate to={"/login"}/>}/>
         <Route path='/upload' element={userData?<Upload/>:<Navigate to={"/login"}/>}/>
         <Route path='/loops' element={userData?<Loops/>:<Navigate to={"/login"}/>}/>

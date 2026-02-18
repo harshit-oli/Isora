@@ -1,12 +1,24 @@
 import React from 'react'
 import logo2 from "../assets/logo2.png"
+import { FaPlus } from "react-icons/fa6";
+import { useNavigate } from 'react-router-dom';
 
-const StoryCard = ({profieImage,userName}) => {
+
+const StoryCard = ({profileImage,userName,story}) => {
+  const navigate=useNavigate();
+  const handleClick=()=>{
+    if(!story && userName=="Your Story"){
+       navigate("/upload");
+    }
+  }
   return (
    <div className='flex flex-col w-[80px]'>
-     <div className='w-[70px] h-[70px] bg-gradient-to-b from-blue-500 to-blue-950 rounded-full flex justify-center items-center'>
+     <div className={`w-[80px] h-[80px] ${story?"bg-gradient-to-b from-blue-500 to-blue-950": ""} rounded-full flex justify-center items-center relative`} onClick={handleClick}>
       <div className='w-[70px] h-[70px] border-2 border-black rounded-full cursor-pointer overflow-hidden'>
-                  <img src={logo2} alt=""  className='w-full object-cover'/>
+                  <img src={profileImage || logo2} alt=""  className='w-full object-cover'/>
+                  {!story && userName=="Your Story" && <div>
+                     <FaPlus className='text-white absolute bottom-1 right-1 font-bold text-2xl'/>
+                    </div>}
       </div>
     </div>
     <div className='text-[14px] text-center truncate w-full text-white'>{userName}</div>
