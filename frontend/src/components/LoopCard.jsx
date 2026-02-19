@@ -158,7 +158,7 @@ const LoopCard = ({loop}) => {
         <div className='absolute bottom-0 w-full h-[5px] bg-gray-900'>
           <div className='w-[200px] h-full bg-white transition-all duration-700 ease-linear' style={{width:`${progress}%`}}></div>
         </div>  
-        <div className="w-full absolute h-[100px] bottom-[10px] px-[10px] flex flex-col gap-[10px]">
+        <div className="w-full absolute h-[100px] bottom-[10px] px-[10px] flex flex-col gap-[10px]">  
             <div className='absolute bottom-[10px] right-[10px] cursor-pointer' onClick={()=>setIsMute(!isMute)}>
                 {!isMute ? <FiVolume2 className='w-[20px] h-[20px] text-white font-semibold'/> 
                 : <FiVolumeX className='w-[20px] h-[20px] text-white font-semibold'/>}

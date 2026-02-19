@@ -2,13 +2,17 @@ import React from 'react'
 import logo2 from "../assets/logo2.png"
 import { FaPlus } from "react-icons/fa6";
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 
 const StoryCard = ({profileImage,userName,story}) => {
   const navigate=useNavigate();
+  const {userData}=useSelector(state=>state.user);
   const handleClick=()=>{
     if(!story && userName=="Your Story"){
        navigate("/upload");
+    }else if(story && userName=="Your Story"){
+       navigate(`/story/${userData.userName}`);
     }
   }
   return (

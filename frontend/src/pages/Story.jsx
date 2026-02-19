@@ -7,13 +7,14 @@ import { setStoryData } from '../redux/storySlice'
 import StoryPart from '../components/StoryPart'
 
 const Story = () => {
+  const {storyData}=useSelector(state=>state.story);
   const {userName}=useParams();
   const dispatch=useDispatch();
-  const storyData=useSelector(state=>state.story);
   const handleStory=async ()=>{
     try {
         const result=await axios.get(`${serverUrl}/api/story/getByUserName/${userName}`,{withCredentials:true})
-        dispatch(setStoryData(result.data));
+        dispatch(setStoryData(result.data.story[0]));
+        console.log(storyData);
     } catch (error) {
         console.log(error);
     }
@@ -24,8 +25,8 @@ const Story = () => {
       }
     },[userName])
   return (
-    <div>
-      <StoryPart story={storyData}/>
+    <div className='w-full h-[100vh] bg-black flex justify-center items-center'>
+      <StoryPart/>
     </div>
   )
 }

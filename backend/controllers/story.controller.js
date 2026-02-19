@@ -63,7 +63,7 @@ export const getStoryUserName=async(req,res)=>{
         const story=await Story.find({
             author:user._id
         }).populate("viewers author")
-        return res.status(200).json(story);
+        return res.status(200).json({story});
     } catch (error) {
         return res.status(500).json({message:"story get by userName error"})
     }
