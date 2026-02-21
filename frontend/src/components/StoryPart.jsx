@@ -3,11 +3,11 @@ import logo2 from "../assets/logo2.png"
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { IoMdArrowBack } from 'react-icons/io'
+import VideoPlayer from './VideoPlayer'
 
 
-const StoryPart = () => {
+const StoryPart = ({storyData}) => {
   const navigate=useNavigate();
-  const {storyData}=useSelector(state=>state.story);
   const [progress,setProgress]=useState(0);
 
   useEffect(()=>{
@@ -39,13 +39,13 @@ const StoryPart = () => {
 
       <div className='w-full h-[90vh] flex items-center justify-center'>
                   {
-                  storyData.mediaType=="image" && <div className='w-[90%] flex items-center justify-center'>
-                    <img src={storyData.media} alt="" className='w-[80%] rounded-2xl object-cover'/>
+                  storyData?.mediaType=="image" && <div className='w-[90%] flex items-center justify-center'>
+                    <img src={storyData?.media} alt="" className='w-[80%] rounded-2xl object-cover'/>
                   </div>
                   }
                   {
-                  storyData.mediaType=="video" && <div className='w-[80%] flex flex-col items-center justify-center'>
-                    <VideoPlayer media={storyData.media}/>
+                  storyData?.mediaType=="video" && <div className='w-[80%] flex flex-col items-center justify-center'>
+                    <VideoPlayer media={storyData?.media}/>
                   </div>
                   }
       </div> 

@@ -14,6 +14,7 @@ import GetAllPost from './hooks/GetAllPost'
 import Loops from './pages/Loops'
 import GetAllLoops from './hooks/getAllLoops'
 import Story from './pages/Story'
+import GetAllStories from './hooks/GetAllStories'
 export const serverUrl="http://localhost:3000"
 const App = () => {
   // GetCurrentUser(); 
@@ -24,6 +25,7 @@ const App = () => {
       <GetAllLoops/>
       <GetSuggestedUsers/>
       <GetAllPost/>
+      <GetAllStories/>
       <Routes>
         <Route path='/signup' element={!userData ? <SignUp/> :<Navigate to={"/"}/>}/>
         <Route path='/login' element={!userData?<SignIn/>:<Navigate to={"/"}/>}/>

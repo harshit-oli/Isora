@@ -14,6 +14,9 @@ const StoryCard = ({profileImage,userName,story}) => {
     }else if(story && userName=="Your Story"){
        navigate(`/story/${userData.userName}`);
     }
+    else{
+      navigate(`/story/${userName}`);
+    }
   }
   return (
    <div className='flex flex-col w-[80px]'>

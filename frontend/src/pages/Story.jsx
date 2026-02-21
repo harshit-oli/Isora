@@ -11,9 +11,10 @@ const Story = () => {
   const {userName}=useParams();
   const dispatch=useDispatch();
   const handleStory=async ()=>{
+    dispatch(setStoryData(null));
     try {
         const result=await axios.get(`${serverUrl}/api/story/getByUserName/${userName}`,{withCredentials:true})
-        dispatch(setStoryData(result.data.story[0]));
+        dispatch(setStoryData(result.data?.story[0]));
         console.log(storyData);
     } catch (error) {
         console.log(error);
@@ -26,7 +27,7 @@ const Story = () => {
     },[userName])
   return (
     <div className='w-full h-[100vh] bg-black flex justify-center items-center'>
-      <StoryPart/>
+      <StoryPart storyData={storyData}/>
     </div>
   )
 }

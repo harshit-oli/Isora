@@ -20,8 +20,6 @@ export const getCurrentUser=async(req,res)=>{
     }
 
 }
-
-
 export const suggestedUsers=async (req,res)=>{
     try {
         const users=await User.find({
