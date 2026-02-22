@@ -16,7 +16,7 @@ const Nav = () => {
       <div className='text-white w-[60px] h-[20px] cursor-pointer text-xl'><FaSearch /></div>
       <div className='text-white w-[60px] h-[20px] cursor-pointer text-xl' onClick={()=>navigate("/upload")}><FaPlus /></div>
       <div className='text-white w-[60px] h-[20px] cursor-pointer text-xl' onClick={()=>navigate("/loops")}><SiYoutubeshorts/></div>
-      <div className='w-[40px] h-[40px] border-2 border-black rounded-full cursor-pointer overflow-hidden'>
+      <div className='w-[40px] h-[40px] rounded-full cursor-pointer overflow-hidden'>
                   <img src={userData?.profileImage || logo2} alt=""  className='w-full object-cover' onClick={()=> navigate(`/profile/${userData.userName}`)}/>
        </div>
     </div>

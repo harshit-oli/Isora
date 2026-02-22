@@ -7,6 +7,7 @@ import { setStoryList } from '../redux/storySlice';
     const GetAllStories = () => {
     const dispatch=useDispatch();
     const {userData}=useSelector(state=>state.user);
+    const {storyData}=useSelector(state=>state.story);
     useEffect(()=>{
         const fetchStories=async ()=>{
             try {
@@ -17,7 +18,7 @@ import { setStoryList } from '../redux/storySlice';
             }
         }
         fetchStories();
-    },[userData]);
+    },[userData,storyData]);
     }
 
     export default GetAllStories

@@ -70,26 +70,25 @@ export const editProfile=async (req,res)=>{
     }
 }
 
-export const getProfile=async(req,res)=>{
+export const getProfile = async (req, res) => {
     try {
-        const {userName}=req.params;
-        const user=await User.findOne({userName}).select("-password").populate("posts loops followers following");
-        if(!user){
-            return res.status(400).json({message:"user not found"});
+        const userName = decodeURIComponent(req.params.userName); // ✅ ye add kar
+        const user = await User.findOne({userName}).select("-password").populate("posts loops followers following");
+        if (!user) {
+            return res.status(400).json({message: "user not found"});
         }
         return res.status(200).json({
-            success:true,
-            message:"user found",
+            success: true,
+            message: "user found",
             user,
         })
     } catch (error) {
         return res.status(500).json({
-            success:false,
-            message:`user profile Error ${error}`
+            success: false,
+            message: `user profile Error ${error}`
         })
     }
 }
-
 export const follow=async(req,res)=>{
     try {
         const currentUserId=req.userId;

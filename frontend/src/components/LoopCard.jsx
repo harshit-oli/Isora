@@ -135,7 +135,7 @@ const LoopCard = ({loop}) => {
           {loop.comments.map((com,index)=>(
             <div key={index} className='w-full flex flex-col gap-[5px] border-b-[1px] border-gray-800 justify-center pb-[10px]'>
                 <div className='flex   items-center gap-[10px] md:gap-[20px]'>
-                         <div className='w-[30px] h-[30px] md:w-[40px] md:h-[40px] border-2 border-black rounded-full cursor-pointer overflow-hidden'>
+                         <div className='w-[30px] h-[30px] md:w-[40px] md:h-[40px] rounded-full cursor-pointer overflow-hidden'>
                          <img src={com.author?.profileImage || logo2} alt=""  className='w-full object-cover'/>
                          </div>
                          <div className='w-[120px] font-semibold truncate text-white'>{com.author?.userName}</div>

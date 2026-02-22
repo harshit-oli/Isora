@@ -4,9 +4,11 @@ import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { IoMdArrowBack } from 'react-icons/io'
 import VideoPlayer from './VideoPlayer'
+import { FaEye } from "react-icons/fa6";
 
 
 const StoryPart = ({storyData}) => {
+  const {userData}=useSelector(state=>state.user);
   const navigate=useNavigate();
   const [progress,setProgress]=useState(0);
 
@@ -30,7 +32,7 @@ const StoryPart = ({storyData}) => {
         <IoMdArrowBack className='text-white w-[25px] h-[25px] cursor-pointer'
                onClick={()=>{navigate("/")}}/>
          <div className='flex  items-center gap-[5px]'>
-         <div className='w-[40px] h-[40px] md:w-[60px] md:h-[60px] border-2 border-black rounded-full cursor-pointer overflow-hidden' onClick={()=>navigate(`/profile/${storyData.author?.userName}`)}>
+         <div className='w-[40px] h-[40px] md:w-[60px] md:h-[60px] rounded-full cursor-pointer overflow-hidden' onClick={()=>navigate(`/profile/${storyData.author?.userName}`)}>
          <img src={storyData?.author?.profileImage || logo2} alt=""  className='w-full object-cover'/>
          </div>
          <div className='w-[120px] truncate text-white'>{storyData?.author?.userName}</div>
@@ -52,6 +54,16 @@ const StoryPart = ({storyData}) => {
        <div className='absolute top-[10px] w-full h-[5px] bg-gray-900'>
           <div className='w-[200px] h-full bg-white transition-all duration-700 ease-linear' style={{width:`${progress}%`}}></div>
         </div>
+        {storyData?.author?.userName===userData?.userName && <div className='absolute text-white w-full flex items-center gap-[13px] h-[70px] bottom-0 p-2 left-0'>
+          <div className='text-white flex items-center gap-[5px]'><FaEye /> {storyData.viewers.length}</div>
+          <div className='flex relative'>
+                        {storyData?.viewers?.slice(0,3).map((viewer,index)=>(
+                            <div  key={index} className={`w-[30px] h-[30px] rounded-full cursor-pointer overflow-hidden ${index > 0 ? "absolute" : ""}`}style={index > 0 ? {left: `${index * 5}px`} : {}}>
+                              <img src={viewer?.profileImage || logo2} alt=""  className='w-full h-full object-cover pb-1'/>
+                          </div>
+                        ))}
+                      </div>
+          </div>}
     </div>
   )
 }

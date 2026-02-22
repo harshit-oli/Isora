@@ -32,6 +32,7 @@ const Profile = () => {
     useEffect(()=>{
       handleProfile();
     },[userName,dispatch])
+
     const handleLogOut=async ()=>{
         try {
             const result=await axios.get(`${serverUrl}/api/auth/logout`,{withCredentials:true})
@@ -51,7 +52,7 @@ const Profile = () => {
       </div>
 
       <div className='w-full h-[150px] flex items-start gap-[20px] lg:gap-[50px] pt-[20px] px-[10px] justify-center'>
-          <div className='w-[80px] h-[80px] border-2 border-black rounded-full cursor-pointer overflow-hidden md:w-[140px] h-[140px]'>
+          <div className='w-[80px] h-[80px] rounded-full cursor-pointer overflow-hidden md:w-[140px] h-[140px]'>
                     <img src={profileData?.profileImage || logo2} alt=""  className='w-full object-cover'/>
           </div>
           <div>
@@ -63,39 +64,32 @@ const Profile = () => {
 
       <div className='w-full h-[100px] flex items-center justify-center gap-[40px] md:gap-[60px] px-[20%] pt-[30px] text-white'>
         <div>
-          <div className='text-white text-[22px] md:text-[30px] font-semibold'>{profileData?.posts.length}</div>
+          <div className='text-white text-[22px] md:text-[30px] font-semibold'>{profileData?.posts?.length}</div>
           <div className='text-[18px] md:text-[22px] text-[#ffffffc7]'>Posts</div>
         </div>
         <div>
           <div className="flex items-center justify-center gap-[20px]">
             <div className='flex relative'>
-              {/* className='w-full h-[150px] flex items-start gap-[20px] lg:gap-[50px] pt-[20px] px-[10px] justify' */}
-
               {profileData?.followers?.slice(0,3).map((user,index)=>(
-                  <div key={index} className={`w-[40px] h-[40px] border-2 border-black rounded-full cursor-pointer overflow-hidden ${index>0?`absolute left-[${index*9}]`:""}`}>
-                    <img src={user?.profileImage || logo2} alt=""  className='w-full object-cover'/>
+                  <div  key={index} className={`w-[40px] h-[40px] rounded-full cursor-pointer overflow-hidden ${index > 0 ? "absolute" : ""}`}style={index > 0 ? {left: `${index * 8}px`} : {}}>
+                    <img src={user?.profileImage || logo2} alt=""  className='w-full h-full object-cover'/>
                 </div>
               ))}
             </div>
-            <div className='text-white text-[22px] md:text-[30px] font-semibold'>{profileData?.followers.length}</div>
+            <div className='text-white text-[22px] md:text-[30px] font-semibold'>{profileData?.followers?.length}</div>
           </div>
           <div className='text-[18px] md:text-[22px] text-[#ffffffc7]'>Followers</div>
         </div>
         <div>
         <div className="flex items-center justify-center gap-[20px]">
-              <div className='flex relative'>
-              {/* className='w-full h-[150px] flex items-start gap-[20px] lg:gap-[50px] pt-[20px] px-[10px] justify' */}
-              <div className='w-[40px] h-[40px] border-2 border-black rounded-full cursor-pointer overflow-hidden'>
-                    <img src={profileData?.profieImage || logo2} alt=""  className='w-full object-cover'/>
-                </div>
-                <div className='w-[40px] h-[40px] border-2 border-black rounded-full cursor-pointer overflow-hidden absolute left-[10px]'>
-                    <img src={profileData?.profieImage || logo2} alt=""  className='w-full object-cover'/>
-                </div>
-                <div className='w-[40px] h-[40px] border-2 border-black rounded-full cursor-pointer overflow-hidden absolute left-[16px]'>
-                    <img src={profileData?.profieImage || logo2} alt=""  className='w-full object-cover'/>
-                </div>
+             <div className='flex relative'>
+              {profileData?.following?.slice(0,3).map((user,index)=>(
+                 <div  key={index} className={`w-[40px] h-[40px] rounded-full cursor-pointer overflow-hidden ${index > 0 ? "absolute" : ""}`}style={index > 0 ? {left: `${index * 5}px`} : {}}>
+                  <img src={user?.profileImage || logo2} alt="" className='w-full h-full object-cover'/>
+                 </div>
+              ))}
             </div>
-          <div className='text-white text-[22px] md:text-[30px] font-semibold'>{profileData?.following.length}</div>
+          <div className='text-white text-[22px] md:text-[30px] font-semibold'>{profileData?.following?.length}</div>
         </div>
           <div className='text-[18px] md:text-[22px] text-[#ffffffc7]'>Following</div>
         </div>
