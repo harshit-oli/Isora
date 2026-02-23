@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import logo2 from "../assets/logo2.png"
 import { FaPlus } from "react-icons/fa6";
 import { useNavigate } from 'react-router-dom';
@@ -10,6 +10,18 @@ import { serverUrl } from '../App';
 const StoryCard = ({profileImage,userName,story}) => {
   const navigate=useNavigate();
   const {userData}=useSelector(state=>state.user);
+  const {storyData,storyList}=useSelector(state=>state.story)
+  const [viewed,setViewed]=useState(false);
+
+  useEffect(()=>{
+    if(story?.viewers?.some((viewer)=>
+     viewer._id?.toString()==userData?._id?.toString() || viewer.toString()==userData?._id?.toString()
+    )){
+      setViewed(true);
+    }else{
+      setViewed(false);
+    }
+  },[story,userData,storyData,storyList])
 
   const handleViewers=async ()=>{
     try {
@@ -32,7 +44,7 @@ const StoryCard = ({profileImage,userName,story}) => {
   }
   return (
    <div className='flex flex-col w-[80px]'>
-     <div className={`w-[80px] h-[80px] ${story?"bg-gradient-to-b from-blue-500 to-blue-950": ""} rounded-full flex justify-center items-center relative`} onClick={handleClick}>
+     <div className={`w-[80px] h-[80px] ${!story?null:!viewed ? "bg-gradient-to-b from-blue-500 to-blue-950": "bg-gradient-to-r from-gray-700 to-black-800"} rounded-full flex justify-center items-center relative`} onClick={handleClick}>
       <div className='w-[70px] h-[70px] border-2 border-black rounded-full cursor-pointer overflow-hidden'>
                   <img src={profileImage || logo2} alt=""  className='w-full object-cover'/>
                   {!story && userName=="Your Story" && <div>
