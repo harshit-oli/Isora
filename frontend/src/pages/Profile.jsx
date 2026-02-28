@@ -11,6 +11,7 @@ import Nav from '../components/Nav';
 import Home from './Home';
 import FollowButton from '../components/FollowButton';
 import Post from '../components/Post';
+import { setSelectedUser } from '../redux/messageSlice';
 const Profile = () => {
 
     const {userName}=useParams();   // yha useParams mai params mai value Link ke through aayi hogi humne Link<to="/getProfile/:userName"></Link> kuch yese kiya hoga
@@ -103,7 +104,10 @@ const Profile = () => {
         &&
         <>
          <FollowButton tailwind={'px-[10px] min-w-[150px] py-[5px] h-[40px] bg-[white] cursor-pointer rounded-2xl'} targetUserId={profileData?._id} onFollowChange={handleProfile}/>
-         <button className='px-[10px] min-w-[150px] py-[5px] h-[40px] bg-[white] cursor-pointer rounded-2xl'>Message</button>
+         <button className='px-[10px] min-w-[150px] py-[5px] h-[40px] bg-[white] cursor-pointer rounded-2xl' onClick={()=>{
+          dispatch(setSelectedUser(profileData))
+          navigate("/messageArea")
+         }}>Message</button>
         </>
         }
       </div>
