@@ -1,12 +1,56 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { IoMdArrowBack } from 'react-icons/io'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import logo2 from "../assets/logo2.png"
+import { BiImageAdd } from "react-icons/bi";
+import { IoSend } from "react-icons/io5";
+import { serverUrl } from '../App'
+import axios from 'axios'
+import { setMessages } from '../redux/messageSlice'
+import SenderMessage from '../components/SenderMessage'
+import ReceiverMessage from '../components/ReceiverMessage'
 
 const MessageArea = () => {
-  const {selectedUser}=useSelector(state=>state.message)
+  const {selectedUser,messages}=useSelector(state=>state.message)
+  const {userData}=useSelector(state=>state.user);
   const navigate=useNavigate();
+  const [input,setInput]=useState("")
+  const imageInput=useRef();
+  const dispatch=useDispatch();
+  const [frontendImage,setFrontendImage]=useState(null);
+  const [backendImage,setBackendImage]=useState(null);
+
+  const handleImage=(e)=>{
+    const file=e.target.files[0];
+    setBackendImage(file);
+    setFrontendImage(URL.createObjectURL(file))
+  }
+  const handleSendMessage=async(e)=>{
+    e.preventDefault()
+     try {
+      const result=await axios.post(`${serverUrl}/api/message/send/${selectedUser._id}`,{message:input},{withCredentials:true});
+      dispatch(setMessages([...messages,result.data]))
+      setInput("");
+
+     } catch (error) {
+        console.log(error);
+     }
+  }
+
+  const getAllMessages=async ()=>{
+    try {
+      const result=await axios.get(`${serverUrl}/api/message/getAll/${selectedUser._id}`,{withCredentials:true})
+      dispatch(setMessages(result.data))
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
+
+  useEffect(()=>{
+  getAllMessages();
+  },[])
   return (
     <div className='w-full h-[100vh] bg-black relative'>
       <div className='w-full flex items-center gap-[15px] px-[20px] py-[10px] fixed top-0 z-[100] bg-black w-full'>
@@ -21,11 +65,28 @@ const MessageArea = () => {
           <div className='text-[15px] text-gray-400'>{selectedUser.name}</div>
        </div> 
       </div>
+      
+       <div className='w-full h-[80%] pt-[100px] pb-[120px] lg:pb-[150px] px-[40px] flex flex-col gap-[50px] overflow-auto bg-black'>
+        {
+          messages && messages.map((mess,index)=>{
+            mess.sender._id==userData._id ? <SenderMessage message={mess}/> : <ReceiverMessage message={mess}/>
+          })
+        }
+       </div>
 
       <div className='w-full h-[80px] fixed bottom-0 flex justify-center items-center bg-black z-[100]'>
 
-        <form className='w-[90%] max-w-[800px] h-[80%] rounded-full bg-[#131616] flex items-center gap-[10px] px-[20px] relative'>
-          <input type="text" placeholder='Message' className='w-full h-full px-[20px] text-[18px] text-white outline-0' />
+        <form className='w-[90%] max-w-[800px] h-[80%] rounded-full bg-[#131616] flex items-center gap-[10px] px-[20px] relative' onSubmit={handleSendMessage}>
+          {frontendImage && <div className='w-[100px] rounded-2xl h-[100px] absolute top-[-120px] right-[10px]overFlow-hidden'>
+                  <img src={frontendImage} alt="" className='h-full object-cover'/>
+                  </div>
+          }
+          <input type="file" accept='image/*' hidden ref={imageInput} onChange={handleImage}/>
+          <input type="text" placeholder='Message' className='w-full h-full px-[20px] text-[18px] text-white outline-0' onChange={(e)=>setInput(e.target.value)} value={input}/>
+          <div onClick={()=>imageInput.current.click()}>
+            <BiImageAdd className='w-[28px] h-[28px] text-white'/>
+          </div>
+          {(input || frontendImage) && <button className='w-[60px] h-[40px] rounded-full bg-gradient-to-br from-[#221e24] to-[#ecd8e4] flex items-center justify-center'><IoSend className='w-[25px] h-[25px] cursor-pointer text-white'/></button>}
         </form>
       </div>
       
