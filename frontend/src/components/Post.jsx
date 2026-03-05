@@ -13,6 +13,7 @@ import axios from 'axios';
 import { setPostData } from '../redux/postSlice';
 import { setUserData } from '../redux/userSlice';
 import FollowButton from './FollowButton';
+import { useNavigate } from 'react-router-dom';
 
 
 const Post = ({post}) => {
@@ -21,6 +22,7 @@ const Post = ({post}) => {
   const [showComment,setShowComment]=useState(false);
   const [message,setMessage]=useState("");
   const dispatch=useDispatch();
+  const navigate=useNavigate();
 
   
   const isSaved = userData?.saved?.some(
@@ -64,12 +66,12 @@ const Post = ({post}) => {
       <div className='w-full h-[80px] flex justify-between items-center px-[10px]'>
          <div className='flex justify-center items-center gap-[10px] md:gap-[20px]'>
          <div className='w-[40px] h-[40px] md:w-[60px] md:h-[60px] rounded-full cursor-pointer overflow-hidden'>
-         <img src={post.author?.profileImage || logo2} alt=""  className='w-full object-cover'/>
+         <img src={post.author?.profileImage || logo2} alt=""  className='w-full object-cover' onClick={()=>navigate(`/profile/${post.author?.userName}`)}/>
          </div>
          <div className='w-[120px] font-semibold truncate'>{post.author?.userName}</div>
          </div>
          {userData._id !== post.author._id && 
-         <FollowButton tailwind={'px-[10px] w-[60px] md:w-[100px] py-[5px] h-[30px] md:h-[40px] bg-[black] text-white rounded-2xl text-[14px] md:text-[16px]'} targetUserId={post.author._id}/>
+         <FollowButton tailwind={'px-[10px] min-w-[60px] md:min-w-[100px] py-[5px] h-[30px] md:h-[40px] bg-[black] text-white rounded-2xl text-[14px] md:text-[16px]'} targetUserId={post.author?._id}/>
          }
       </div>
       <div className='w-[90%] flex items-center justify-center'>

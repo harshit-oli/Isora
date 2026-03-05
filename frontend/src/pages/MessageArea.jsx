@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { IoMdArrowBack } from 'react-icons/io'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { Form, useNavigate } from 'react-router-dom'
 import logo2 from "../assets/logo2.png"
 import { BiImageAdd } from "react-icons/bi";
 import { IoSend } from "react-icons/io5";
@@ -29,9 +29,16 @@ const MessageArea = () => {
   const handleSendMessage=async(e)=>{
     e.preventDefault()
      try {
-      const result=await axios.post(`${serverUrl}/api/message/send/${selectedUser._id}`,{message:input},{withCredentials:true});
+      const formData=new FormData();
+      formData.append("message",input)
+      if(backendImage){
+        formData.append("image",backendImage)
+      }
+      const result=await axios.post(`${serverUrl}/api/message/send/${selectedUser._id}`,formData,{withCredentials:true});
       dispatch(setMessages([...messages,result.data]))
       setInput("");
+      setBackendImage(null);
+      setFrontendImage(null);
 
      } catch (error) {
         console.log(error);
@@ -58,19 +65,19 @@ const MessageArea = () => {
                      onClick={()=>{navigate(`/`)}}/>
                     </div>
        <div className='w-[40px] h-[40px] rounded-full cursor-pointer overflow-hidden'>
-                        <img src={selectedUser.profileImage || logo2} alt=""  className='w-full object-cover' onClick={()=> navigate(`/profile/${selectedUser?.userName}`)}/>
+                        <img src={selectedUser?.profileImage || logo2} alt=""  className='w-full object-cover' onClick={()=> navigate(`/profile/${selectedUser?.userName}`)}/>
        </div>  
        <div className='text-white text-[18px] font-semibold'>
-         <div>{selectedUser.userName}</div>
-          <div className='text-[15px] text-gray-400'>{selectedUser.name}</div>
+         <div>{selectedUser?.userName}</div>
+          <div className='text-[15px] text-gray-400'>{selectedUser?.name}</div>
        </div> 
       </div>
       
-       <div className='w-full h-[80%] pt-[100px] pb-[120px] lg:pb-[150px] px-[40px] flex flex-col gap-[50px] overflow-auto bg-black'>
+       <div className='w-full h-[80%] pt-[100px] lg:pb-[120px] px-[40px] flex flex-col gap-[50px] overflow-auto bg-black'>
         {
-          messages && messages.map((mess,index)=>{
-            mess.sender._id==userData._id ? <SenderMessage message={mess}/> : <ReceiverMessage message={mess}/>
-          })
+          messages && messages.map((mess,index)=>(
+            mess.sender==userData._id ? <SenderMessage message={mess} key={index}/> : <ReceiverMessage message={mess} key={index}/>
+          ))
         }
        </div>
 
