@@ -9,11 +9,11 @@ import postRouter from "./routes/post.routes.js";
 import loopRouter from "./routes/loop.routes.js";
 import storyRouter from "./routes/story.routes.js";
 import messageRouter from "./routes/message.routes.js";
+import { app, server } from "./socket.js";
 
 dotenv.config();
 
 const PORT = process.env.PORT || 3000;
-const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
@@ -29,7 +29,7 @@ app.use("/api/loop",loopRouter)
 app.use("/api/story",storyRouter)
 app.use("/api/message",messageRouter)
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     connectDb();
       console.log(`✅ Server is running on port ${PORT}`);
   });

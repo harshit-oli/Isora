@@ -1,9 +1,9 @@
-import React from 'react'
-import { Routes,Route, Navigate } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import SignUp from './pages/SignUp'
 import SignIn from './pages/SignIn'
-import ForgotPassword from './pages/ForgotPassword' 
-import { useSelector } from 'react-redux'
+import ForgotPassword from './pages/ForgotPassword'
+import { useDispatch, useSelector } from 'react-redux'
 import GetCurrentUser from './hooks/GetCurrentUser'
 import Home from './pages/Home'
 import GetSuggestedUsers from "./hooks/GetSuggestedUsers"
@@ -17,31 +17,61 @@ import Story from './pages/Story'
 import GetAllStories from './hooks/GetAllStories'
 import Messages from './pages/Messages'
 import MessageArea from './pages/MessageArea'
-export const serverUrl="http://localhost:3000"
+import { io } from "socket.io-client"
+import { setOnlineUsers } from './redux/socketSlice'
+import { SocketContext } from './context/SocketContext'
+
+export const serverUrl = "http://localhost:3000"
+
 const App = () => {
-  // GetCurrentUser(); 
-  const {userData}=useSelector(state=>state.user);
+  const { userData } = useSelector(state => state.user);
+  const dispatch = useDispatch();
+  const [socket, setSocket] = useState(null);
+
+  useEffect(() => {
+    if (userData) {
+      const socketIo = io(serverUrl, {
+        query: { userId: userData._id }
+      })
+
+      socketIo.on('getOnlineUsers', (users) => {
+         console.log("online users:", users)
+         console.log("dispatching...")
+        dispatch(setOnlineUsers(users))
+      })
+
+      setSocket(socketIo)
+
+      return () => {
+        socketIo.close()
+        setSocket(null)
+      }
+    }
+  }, [userData])
+
   return (
-    <div>
-      <GetCurrentUser/>
-      <GetAllLoops/>
-      <GetSuggestedUsers/>
-      <GetAllPost/>
-      <GetAllStories/>
-      <Routes>
-        <Route path='/signup' element={!userData ? <SignUp/> :<Navigate to={"/"}/>}/>
-        <Route path='/login' element={!userData?<SignIn/>:<Navigate to={"/"}/>}/>
-        <Route path='/' element={userData?<Home/>:<Navigate to={"/login"}/>}/>
-        <Route path='/forgot-password' element={!userData?<ForgotPassword/> : <Navigate to={"/"}/>}/>
-        <Route path='/profile/:userName' element={userData?<Profile/>:<Navigate to={"/login"}/>}/>
-        <Route path='/story/:userName' element={userData?<Story/>:<Navigate to={"/login"}/>}/>
-        <Route path='/editProfile' element={userData?<EditProfile/>:<Navigate to={"/login"}/>}/>
-        <Route path='/messages' element={userData?<Messages/>:<Navigate to={"/login"}/>}/>
-        <Route path='/messageArea' element={userData?<MessageArea/>:<Navigate to={"/login"}/>}/>
-        <Route path='/upload' element={userData?<Upload/>:<Navigate to={"/login"}/>}/>
-        <Route path='/loops' element={userData?<Loops/>:<Navigate to={"/login"}/>}/>
-      </Routes>
-    </div>
+    <SocketContext.Provider value={socket}>
+      <div>
+        <GetCurrentUser />
+        <GetAllLoops />
+        <GetSuggestedUsers />
+        <GetAllPost />
+        <GetAllStories />
+        <Routes>
+          <Route path='/signup' element={!userData ? <SignUp /> : <Navigate to={"/"} />} />
+          <Route path='/login' element={!userData ? <SignIn /> : <Navigate to={"/"} />} />
+          <Route path='/' element={userData ? <Home /> : <Navigate to={"/login"} />} />
+          <Route path='/forgot-password' element={!userData ? <ForgotPassword /> : <Navigate to={"/"} />} />
+          <Route path='/profile/:userName' element={userData ? <Profile /> : <Navigate to={"/login"} />} />
+          <Route path='/story/:userName' element={userData ? <Story /> : <Navigate to={"/login"} />} />
+          <Route path='/editProfile' element={userData ? <EditProfile /> : <Navigate to={"/login"} />} />
+          <Route path='/messages' element={userData ? <Messages /> : <Navigate to={"/login"} />} />
+          <Route path='/messageArea' element={userData ? <MessageArea /> : <Navigate to={"/login"} />} />
+          <Route path='/upload' element={userData ? <Upload /> : <Navigate to={"/login"} />} />
+          <Route path='/loops' element={userData ? <Loops /> : <Navigate to={"/login"} />} />
+        </Routes>
+      </div>
+    </SocketContext.Provider>
   )
 }
 
