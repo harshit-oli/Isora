@@ -20,6 +20,8 @@ import MessageArea from './pages/MessageArea'
 import { io } from "socket.io-client"
 import { setOnlineUsers } from './redux/socketSlice'
 import { SocketContext } from './context/SocketContext'
+import GetFollowingList from './hooks/GetFollowingList'
+import GetPrevChatUsers from './hooks/GetPrevChatUsers'
 
 export const serverUrl = "http://localhost:3000"
 
@@ -52,11 +54,13 @@ const App = () => {
   return (
     <SocketContext.Provider value={socket}>
       <div>
-        <GetCurrentUser />
-        <GetAllLoops />
-        <GetSuggestedUsers />
-        <GetAllPost />
-        <GetAllStories />
+        <GetCurrentUser/>
+        <GetAllLoops/>
+        <GetSuggestedUsers/>
+        <GetAllPost/>
+        <GetAllStories/>
+        <GetFollowingList/>
+        <GetPrevChatUsers/>
         <Routes>
           <Route path='/signup' element={!userData ? <SignUp /> : <Navigate to={"/"} />} />
           <Route path='/login' element={!userData ? <SignIn /> : <Navigate to={"/"} />} />

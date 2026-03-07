@@ -65,13 +65,13 @@ export const getPrevUserChats=async (req,res)=>{
         const currentUserId=req.userId;
         const conversations=await Conversation.find({
             participants:currentUserId
-        }).populate(participants).sort({updatedAt:-1});
+        }).populate("participants").sort({updatedAt:-1});
 
         const userMap={}
         conversations.forEach(conv => {
             conv.participants.forEach(user=>{
                 if(user._id != currentUserId){
-                    userMap(user._id)=user
+                    userMap[user._id]=user
                 }
             });
         });
