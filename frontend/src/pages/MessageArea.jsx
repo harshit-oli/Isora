@@ -10,6 +10,7 @@ import axios from 'axios'
 import { setMessages } from '../redux/messageSlice'
 import SenderMessage from '../components/SenderMessage'
 import ReceiverMessage from '../components/ReceiverMessage'
+import { useSocket } from '../context/SocketContext'
 
 const MessageArea = () => {
   const {selectedUser,messages}=useSelector(state=>state.message)
@@ -20,6 +21,7 @@ const MessageArea = () => {
   const dispatch=useDispatch();
   const [frontendImage,setFrontendImage]=useState(null);
   const [backendImage,setBackendImage]=useState(null);
+  const socket = useSocket();
 
   const handleImage=(e)=>{
     const file=e.target.files[0];
@@ -58,6 +60,14 @@ const MessageArea = () => {
   useEffect(()=>{
   getAllMessages();
   },[])
+
+useEffect(()=>{
+  socket?.on("newMessage",(mess)=>{
+    dispatch(setMessages([...messages, mess]))
+  })
+
+  return ()=> socket?.off("newMessage")
+},[socket, messages])
   return (
     <div className='w-full h-[100vh] bg-black relative'>
       <div className='w-full flex items-center gap-[15px] px-[20px] py-[10px] fixed top-0 z-[100] bg-black w-full'>
@@ -75,7 +85,7 @@ const MessageArea = () => {
       
        <div className='w-full h-[80%] pt-[100px] lg:pb-[120px] px-[40px] flex flex-col gap-[50px] overflow-auto bg-black'>
         {
-          messages && messages.map((mess,index)=>(
+          messages && messages?.map((mess,index)=>(
             mess.sender==userData._id ? <SenderMessage message={mess} key={index}/> : <ReceiverMessage message={mess} key={index}/>
           ))
         }
