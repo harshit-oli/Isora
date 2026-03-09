@@ -11,6 +11,7 @@ import axios from 'axios';
 import { serverUrl } from '../App';
 import { setLoopData } from '../redux/loopSlice';
 import { IoSend } from 'react-icons/io5';
+import { useSocket } from '../context/SocketContext'
 const LoopCard = ({loop}) => {
   const [isPlaying,setIsPlaying]=useState(true);
   const [isMute,setIsMute]=useState(false);
@@ -24,6 +25,7 @@ const LoopCard = ({loop}) => {
    const [message,setMessage]=useState("");
    const dispatch=useDispatch();
    const commentRef=useRef()
+   const socket = useSocket();
    useEffect(()=>{
     const observer=new IntersectionObserver(([entry])=>{
       const video=entry.target;
@@ -117,6 +119,21 @@ const LoopCard = ({loop}) => {
         setProgress(percent);
       }
     }
+
+    useEffect(()=>{
+      socket.on("likedLoop",(updatedData)=>{
+        const updatedLoops=loopData?.map(p=>p._id==updatedData.loopId ? {...p,likes:updatedData.likes}: p)
+        dispatch(setLoopData(updatedLoops))
+      })
+      socket.on("commentedLoop",(updatedData)=>{
+        const updatedLoops=loopData?.map(p=>p._id==updatedData.loopId ? {...p,comments:updatedData.comments}: p)
+        dispatch(setLoopData(updatedLoops))
+      })
+    
+      return ()=>{socket?.off("likedLoop")
+                socket?.off("commentedLoop")
+      }
+     },[socket,loopData,dispatch])
   return (
     <div className='w-full lg:w-[480px] h-[100vh] flex items-center justify-center border-l-2 border-r-2 border-gray-800 relative overflow-hidden'>
       {showHeart && 

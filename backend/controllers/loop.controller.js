@@ -1,7 +1,7 @@
 import uploadOnCloudinary from "../config/cloudinary.js";
 import Loop from "../models/loop.model.js";
 import User from "../models/user.model.js";
-
+import {io} from "../socket.js";
 export const uploadLoop=async(req,res)=>{
     try {
         const {caption}=req.body;
@@ -57,6 +57,10 @@ export const like=async (req,res)=>{
         }
         await loop.save()
         await loop.populate("author","name userName profileImage")
+        io.emit("likedLoop",{
+            loopId:loop._id,
+            likes:loop.likes,
+        })
         return res.status(200).json(loop)
     } catch (error) {
           return res.status(500).json({message:`likeLoop error ${error}`});
@@ -80,6 +84,10 @@ export const comment=async(req,res)=>{
         await loop.save();
         await loop.populate("author","name userName profileImage");
         await loop.populate("comments.author")
+         io.emit("commentedLoop",{
+            loopId:loop._id,
+            comments:loop.comments,
+        })
         return res.status(200).json(loop)
     } catch (error) {
          return res.status(500).json({message:`loopComment error ${error}`});

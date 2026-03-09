@@ -14,7 +14,8 @@ import { setPostData } from '../redux/postSlice';
 import { setUserData } from '../redux/userSlice';
 import FollowButton from './FollowButton';
 import { useNavigate } from 'react-router-dom';
-
+import { useSocket } from '../context/SocketContext'
+import { useEffect } from 'react';
 
 const Post = ({post}) => {
   const {userData}=useSelector((state)=>state.user);
@@ -23,6 +24,7 @@ const Post = ({post}) => {
   const [message,setMessage]=useState("");
   const dispatch=useDispatch();
   const navigate=useNavigate();
+    const socket = useSocket();
 
   
   const isSaved = userData?.saved?.some(
@@ -60,6 +62,22 @@ const Post = ({post}) => {
       console.log(error);
     }
   }
+ 
+ useEffect(()=>{
+  socket.on("likedPost",(updatedData)=>{
+    const updatedPosts=postData?.map(p=>p._id==updatedData.postId ? {...p,likes:updatedData.likes}: p)
+    dispatch(setPostData(updatedPosts))
+  })
+  socket.on("commentedPost",(updatedData)=>{
+    const updatedPosts=postData?.map(p=>p._id==updatedData.postId ? {...p,comments:updatedData.comments}: p)
+    dispatch(setPostData(updatedPosts))
+  })
+
+  return ()=>{socket?.off("likedPost")
+            socket?.off("commentedPost")
+  }
+ },[socket,postData,dispatch])
+
   return (
     <div className='w-[90%] min-h-[450px] flex flex-col gap-[10px]
      bg-white items-center shadow-2xl shadow-[#00000058] rounded-2xl pb-[20px]'>
