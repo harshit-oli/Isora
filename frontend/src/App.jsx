@@ -22,6 +22,7 @@ import { setOnlineUsers } from './redux/socketSlice'
 import { SocketContext } from './context/SocketContext'
 import GetFollowingList from './hooks/GetFollowingList'
 import GetPrevChatUsers from './hooks/GetPrevChatUsers'
+import Search from './pages/Search'
 
 export const serverUrl = "http://localhost:3000"
 
@@ -73,6 +74,7 @@ const App = () => {
           <Route path='/messageArea' element={userData ? <MessageArea /> : <Navigate to={"/login"} />} />
           <Route path='/upload' element={userData ? <Upload /> : <Navigate to={"/login"} />} />
           <Route path='/loops' element={userData ? <Loops /> : <Navigate to={"/login"} />} />
+          <Route path='/search' element={userData ? <Search/> : <Navigate to={"/login"} />} />
         </Routes>
       </div>
     </SocketContext.Provider>

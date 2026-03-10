@@ -13,7 +13,7 @@ const Nav = () => {
   return (
     <div className='w-[90%] lg:w-[40%] h-[80px] bg-black flex justify-around items-center fixed bottom-[20px] rounded-full shadow-2xl shadow-[#000000] z-[100]'>
       <div className='text-white w-[60px] h-[20px] cursor-pointer text-xl' onClick={()=>navigate("/")}><GoHomeFill /></div>
-      <div className='text-white w-[60px] h-[20px] cursor-pointer text-xl'><FaSearch /></div>
+      <div className='text-white w-[60px] h-[20px] cursor-pointer text-xl' onClick={()=>navigate("/search")}><FaSearch /></div>
       <div className='text-white w-[60px] h-[20px] cursor-pointer text-xl' onClick={()=>navigate("/upload")}><FaPlus /></div>
       <div className='text-white w-[60px] h-[20px] cursor-pointer text-xl' onClick={()=>navigate("/loops")}><SiYoutubeshorts/></div>
       <div className='w-[40px] h-[40px] rounded-full cursor-pointer overflow-hidden'>
