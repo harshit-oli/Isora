@@ -1,4 +1,5 @@
 import uploadOnCloudinary from "../config/cloudinary.js";
+import Notification from "../models/notification.model.js";
 import User from "../models/user.model.js";
 
 export const getCurrentUser=async(req,res)=>{
@@ -120,6 +121,20 @@ export const follow=async(req,res)=>{
         else{
             currentUser.following.push(targetUserId)
             targetUser.followers.push(currentUserId);
+             if(currentUser._id !== targetUser._id){
+                            const notification=await Notification.create({
+                                sender:currentUser._id,
+                                receiver:targetUser._id,
+                                type:"follow",
+                                message:"started following you"
+                            })
+                            const populatedNotification=await Notification.findById(notification._id).populate("sender receiver")
+                            const receiverSocketId=getSocketId(targetUser._id)
+            
+                            if(receiverSocketId){
+                                io.to(receiverSocketId).emit("newNotification",populatedNotification)
+                            }
+                        }
             await currentUser.save();
             await targetUser.save(); 
 
@@ -166,5 +181,32 @@ export const search=async(req,res)=>{
           return res.status(500).json({
             message:"server error",
         })
+    }
+}
+
+export const getAllNotifications=async (req,res)=>{
+    try {
+        const notifications=await Notification.find({
+            receiver:req.userId
+        }).populate("sender receiver post loop")
+
+        return res.status(200).json(notifications)
+    } catch (error) {
+       return res.status(500).json({message:`get notification error ${error}`})
+    }
+}
+
+export const markAsRead=async (req,res)=>{
+    try {
+        const notificationId=req.params.notificationId
+        const notification=await Notification.findById(notificationId).populate("sender receiver post loop")
+        notification.isRead=true
+        notification.save()
+        return res.status(200).json({
+            message:"marked as read",
+        })
+    } catch (error) {
+        return res.status(500).json({message:`read notification error ${error}`})
+        
     }
 }
