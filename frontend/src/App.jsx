@@ -23,6 +23,7 @@ import { SocketContext } from './context/SocketContext'
 import GetFollowingList from './hooks/GetFollowingList'
 import GetPrevChatUsers from './hooks/GetPrevChatUsers'
 import Search from './pages/Search'
+import GetAllNotifications from './hooks/GetAllNotifications'
 
 export const serverUrl = "http://localhost:3000"
 
@@ -62,6 +63,7 @@ const App = () => {
         <GetAllStories/>
         <GetFollowingList/>
         <GetPrevChatUsers/>
+        <GetAllNotifications/>
         <Routes>
           <Route path='/signup' element={!userData ? <SignUp /> : <Navigate to={"/"} />} />
           <Route path='/login' element={!userData ? <SignIn /> : <Navigate to={"/"} />} />

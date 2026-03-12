@@ -24,8 +24,9 @@ const LeftHome = () => {
     <div className='w-[25%] hidden lg:block min-h-[100vh] bg-[black] border-r-2 border-gray-900'>
       <div className='w-full h-[100px] flex items-center justify-between p-[20px]'>
         <img src={logo} alt="" className='w-[80px]' />
-        <div>
+        <div className='relative'>
             <FaRegHeart className='text-white w-[25px] h-[25px]'/>
+            <div className='w-[10px] h-[10px] bg-blue-600 rounded-full absolute top-0 right-[-5px]'></div>
         </div>
       </div>
       <div className='flex flex-center w-full justify-between gap-[10px] px-[10px] border-b-2 border-gray-800 py-[10px]'>
