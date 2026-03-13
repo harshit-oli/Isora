@@ -12,13 +12,17 @@ const Feed = () => {
   const {postData}=useSelector((state)=>state.post)
    const {userData}=useSelector((state)=>state.user)
     const {storyList,currentUserStory}=useSelector((state)=>state.story)
+    const {notificationData}=useSelector(state=>state.user);
     const navigate=useNavigate();
   return (
     <div className='lg:w-[50%] w-full bg-black min-h-[100vh] lg:h-[100vh] relative lg:overflow-y-auto'>
        <div className='w-full h-[100px] flex items-center justify-between p-[20px] lg:hidden'>
               <img src={logo} alt="" className='w-[80px]' />
               <div className='flex items-center gap-[10px]'>
-                  <FaRegHeart className='text-white w-[25px] h-[25px]'/>
+                 <div className='relative' onClick={()=>navigate("/notifications")}>
+                            <FaRegHeart className='text-white w-[25px] h-[25px]'/>
+                            {notificationData && notificationData?.some((noti)=>noti.isRead===false) &&  (<div className='w-[10px] h-[10px] bg-blue-600 rounded-full absolute top-0 right-[-5px]'></div>)}
+                        </div>
                   <LuMessageCircleMore className='text-white w-[25px] h-[25px]' onClick={()=>navigate("/messages")}/>
               </div>
             </div>

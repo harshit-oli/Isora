@@ -24,6 +24,7 @@ import GetFollowingList from './hooks/GetFollowingList'
 import GetPrevChatUsers from './hooks/GetPrevChatUsers'
 import Search from './pages/Search'
 import GetAllNotifications from './hooks/GetAllNotifications'
+import Notifications from './pages/Notifications'
 
 export const serverUrl = "http://localhost:3000"
 
@@ -77,6 +78,7 @@ const App = () => {
           <Route path='/upload' element={userData ? <Upload /> : <Navigate to={"/login"} />} />
           <Route path='/loops' element={userData ? <Loops /> : <Navigate to={"/login"} />} />
           <Route path='/search' element={userData ? <Search/> : <Navigate to={"/login"} />} />
+            <Route path='/notifications' element={userData ? <Notifications/> : <Navigate to={"/login"} />} />
         </Routes>
       </div>
     </SocketContext.Provider>
