@@ -30,7 +30,7 @@ const LeftHome = () => {
       <div className='w-full h-[100px] flex items-center justify-between p-[20px]'>
         <img src={logo} alt="" className='w-[80px]' />
         <div className='relative z-[100]' onClick={()=>setShowNotification(prev=>!prev)}>
-            <FaRegHeart className='text-white w-[25px] h-[25px]'/>
+            <FaRegHeart className='text-white w-[25px] h-[25px] cursor-pointer'/>
             {notificationData && notificationData?.some((noti)=>noti.isRead===false) &&  (<div className='w-[10px] h-[10px] bg-blue-600 rounded-full absolute top-0 right-[-5px]'></div>)}
         </div>
       </div>

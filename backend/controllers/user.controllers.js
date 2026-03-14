@@ -74,8 +74,17 @@ export const editProfile=async (req,res)=>{
 
 export const getProfile = async (req, res) => {
     try {
-        const userName = decodeURIComponent(req.params.userName); // ✅ ye add kar
-        const user = await User.findOne({userName}).select("-password").populate("posts loops followers following");
+        const userName = decodeURIComponent(req.params.userName);
+        const user = await User.findOne({userName})
+            .select("-password")
+            .populate("posts loops followers following")
+            .populate({
+                path: "saved",
+                populate: {
+                    path: "author",
+                    select: "userName profileImage _id"
+                }
+            });
         if (!user) {
             return res.status(400).json({message: "user not found"});
         }
@@ -189,7 +198,7 @@ export const getAllNotifications=async (req,res)=>{
     try {
         const notifications=await Notification.find({
             receiver:req.userId
-        }).populate("sender receiver post loop")
+        }).populate("sender receiver post loop").sort({createdAt:-1})
 
         return res.status(200).json(notifications)
     } catch (error) {
@@ -199,10 +208,21 @@ export const getAllNotifications=async (req,res)=>{
 
 export const markAsRead=async (req,res)=>{
     try {
-        const notificationId=req.params.notificationId
-        const notification=await Notification.findById(notificationId).populate("sender receiver post loop")
-        notification.isRead=true
-        notification.save()
+        const {notificationId}=req.body
+        if(Array.isArray(notificationId) && notificationId.length > 0){
+            //do all mark as read
+            await Notification.updateMany(
+                {_id:{$in: notificationId}, receiver:req.userId},
+                {$set: {isRead:true}}
+            );
+        }
+        else{
+            //mark single notification as read
+            await Notification.findOneAndUpdate(
+                {_id: notificationId, receiver: req.userId},
+                {$set: { isRead: true }}
+            );
+        }
         return res.status(200).json({
             message:"marked as read",
         })

@@ -20,10 +20,10 @@ const Feed = () => {
               <img src={logo} alt="" className='w-[80px]' />
               <div className='flex items-center gap-[10px]'>
                  <div className='relative' onClick={()=>navigate("/notifications")}>
-                            <FaRegHeart className='text-white w-[25px] h-[25px]'/>
+                            <FaRegHeart className='text-white w-[25px] h-[25px] cursor-pointer'/>
                             {notificationData && notificationData?.some((noti)=>noti.isRead===false) &&  (<div className='w-[10px] h-[10px] bg-blue-600 rounded-full absolute top-0 right-[-5px]'></div>)}
                         </div>
-                  <LuMessageCircleMore className='text-white w-[25px] h-[25px]' onClick={()=>navigate("/messages")}/>
+                  <LuMessageCircleMore className='text-white w-[25px] h-[25px] cursor-pointer' onClick={()=>navigate("/messages")}/>
               </div>
             </div>
 

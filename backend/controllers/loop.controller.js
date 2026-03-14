@@ -2,7 +2,7 @@ import uploadOnCloudinary from "../config/cloudinary.js";
 import Loop from "../models/loop.model.js";
 import Notification from "../models/notification.model.js";
 import User from "../models/user.model.js";
-import {io} from "../socket.js";
+import {getSocketId, io} from "../socket.js";
 export const uploadLoop=async(req,res)=>{
     try {
         const {caption}=req.body;
