@@ -63,7 +63,7 @@ const StoryPart = ({ storyData }) => {
       {/* Story Content */}
       {!showViewers && (
         <>
-          <div className='w-full h-[90vh] flex items-center justify-center'>
+          <div className='w-full h-[90vh] flex items-center justify-center overflow-hidden'>
             {storyData?.mediaType === "image" && (
               <div className='w-[90%] flex items-center justify-center'>
                 <img
