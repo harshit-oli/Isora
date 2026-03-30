@@ -47,8 +47,8 @@ export const register=async(req,res)=>{
         res.cookie("token",token,{
             httpOnly:true,
             maxAge:24*60*60*1000,
-            secure:false,
-            sameSite:"strict"
+            secure:true,
+            sameSite:"none"
         })
 
         return res.status(200).json({
@@ -93,8 +93,8 @@ export const logIn=async(req,res)=>{
         res.cookie("token",token,{
             httpOnly:true,
             maxAge:24*60*60*1000,
-            secure:false,
-            sameSite:"strict"
+            secure:true,
+            sameSite:"none"
         })
 
         return res.status(200).json({
