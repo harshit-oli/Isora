@@ -27,7 +27,7 @@ import GetAllNotifications from './hooks/GetAllNotifications'
 import Notifications from './pages/Notifications'
 import { setNotificationData } from './redux/userSlice'
 
-export const serverUrl = "http://localhost:3000"
+export const serverUrl = "https://isora-backend.onrender.com"
 
 const App = () => {
   const {userData,notificationData} = useSelector(state => state.user);
